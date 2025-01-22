@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/high_left_button"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintWidth_percent="0.5"
+
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_line"
+        app:layout_constraintEnd_toStartOf="@id/vertical_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        style="@style/Urgent_And_Important_ButtonStyle"
+        android:backgroundTint="@color/Teal"
+
+        android:text="@string/urgent_and_important"
+
+        android:onClick="onClick"/>
+
+    <Button
+        android:id="@+id/high_right_button"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintWidth_percent="0.5"
+
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_line"
+        app:layout_constraintStart_toEndOf="@id/vertical_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        style="@style/Non_Urgent_And_Important"
+
+        android:text="@string/non_urgent_and_important"
+
+        android:onClick="onClick"/>
+
+    <Button
+        android:id="@+id/low_left_button"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintWidth_percent="0.5"
+
+        app:layout_constraintEnd_toStartOf="@id/vertical_line"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        style="@style/Non_Important_And_Urgent"
+
+        android:text="@string/non_important_and_urgent"
+
+        android:onClick="onClick"/>
+
+    <Button
+        android:id="@+id/low_right_button"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintWidth_percent="0.5"
+
+        app:layout_constraintStart_toEndOf="@id/vertical_line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_line"
+
+        style="@style/Non_Important_And_Non_Urgent"
+
+        android:text="@string/non_important_and_non_urgent"
+
+        android:onClick="onClick"/>
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+
+        android:background="@android:color/black"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="0.5"
+        />
+
+    <View
+        android:id="@+id/vertical_line"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+
+        android:background="@android:color/black"
+
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.5"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

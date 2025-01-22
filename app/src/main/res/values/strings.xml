@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Priorify</string>
+    <string name="urgent_and_important">СРОЧНОЕ И ВАЖНОЕ</string>
+    <string name="non_urgent_and_important">НЕСРОЧНОЕ И ВАЖНОЕ</string>
+    <string name="non_important_and_urgent">НЕВАЖНОЕ И СРОЧНОЕ</string>
+    <string name="non_important_and_non_urgent">НЕВАЖНОЕ И НЕСРОЧНОЕ</string>
+</resources>

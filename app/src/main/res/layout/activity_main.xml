@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/high_left_button"
 
         android:layout_width="0dp"
@@ -27,7 +27,7 @@
 
         android:onClick="onClick"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/high_right_button"
 
         android:layout_width="0dp"
@@ -46,7 +46,7 @@
 
         android:onClick="onClick"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/low_left_button"
 
         android:layout_width="0dp"
@@ -65,7 +65,7 @@
 
         android:onClick="onClick"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/low_right_button"
 
         android:layout_width="0dp"

@@ -1,6 +1,7 @@
 package com.myprojects.priorify;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +18,14 @@ import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
 
+    private static final String TAG = "HistoryActivity";
+
     ArrayAdapter<String> notes_adapter;
-    ArrayList<String> notes;
+    ArrayList<String> block_of_notes;
+    String[] notes;
 
     String block_name;
-    String edittext_text;
+    String user_text;
 
     EditText editText;
     ListView lv_history;
@@ -31,23 +35,41 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        editText = findViewById(R.id.edit_text);
-        edittext_text = editText.getText().toString();
-
         block_name = getIntent().getStringExtra("block_name");
 
         File[] notes_files = FileHandler.listFilesInDirectory(getApplicationContext());
 
-        notes = new ArrayList<>();
+        block_of_notes = new ArrayList<>();
         for (File file : notes_files) {
             if (file.getName().equals("profileInstalled"))
                 continue;
-            String prompt = file.getName().replace(".txt", "");
-            notes.add(prompt);
+            String note = file.getName().replace(".txt", "");
+            block_of_notes.add(note);
         }
 
         lv_history = findViewById(R.id.history_list);
 
+        Set_Adapter();
+
+        registerForContextMenu(lv_history);
+    }
+
+    private void Set_Adapter() {
+        String error_handler = FileHandler.readFileContents(getApplicationContext(), block_name);
+
+        if (error_handler.equals("Ошибка при чтении файла")) {
+            Toast.makeText(this, "Ошибка при чтении файла", Toast.LENGTH_SHORT).show();
+            error_handler = "";
+        }
+        if (error_handler.equals("Файл не найден.")) {
+            error_handler = "";
+        }
+
+        notes = error_handler.split("<next note>");
+
+        for (String note : notes) {
+            Log.i(TAG, note);
+        }
         registerForContextMenu(lv_history);
 
         notes_adapter = new ArrayAdapter<>(this,
@@ -57,7 +79,17 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public void SaveButtonOnClick(View view) {
-        FileHandler.saveToFile(getApplicationContext(), block_name, edittext_text);
+        editText = findViewById(R.id.edit_text);
+        user_text = editText.getText().toString().strip();
+        if(!user_text.isEmpty()) {
+
+            FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
+
+            Set_Adapter();
+        }
+        else {
+            Log.i(TAG, "user_text пуст");
+        }
     }
 
     @Override
@@ -68,15 +100,17 @@ public class HistoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        Log.i(TAG, "ItemSelected");
         if (item.getTitle().equals("Удалить")) {
+            Log.i(TAG, "Удалить");
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            String fileName = notes.get(info.position);
+            String fileName = block_of_notes.get(info.position);
             // Удаляем файл через FileHandler
             boolean isDeleted = FileHandler.deleteFile(getApplicationContext(), fileName);
 
             if (isDeleted) {
                 // Убираем элемент из списка и обновляем адаптер
-                notes.remove(info.position);
+                block_of_notes.remove(info.position);
                 notes_adapter.notifyDataSetChanged();
                 Toast.makeText(this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show();
 

@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
+        android:divider="@null"
+
         app:layout_constraintBottom_toTopOf="@+id/edit_text"
         app:layout_constraintTop_toTopOf="parent"
 
@@ -22,9 +24,9 @@
         android:layout_height="100dp"
 
         android:hint="@string/hint"
+        android:inputType="text"
 
         app:layout_constraintBottom_toTopOf="@id/save_note"
-
         />
 
     <Button

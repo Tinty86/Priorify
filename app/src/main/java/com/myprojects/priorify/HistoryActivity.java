@@ -9,11 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,7 +22,6 @@ public class HistoryActivity extends AppCompatActivity {
     private static final String TAG = "HistoryActivity";
 
     ArrayAdapter<String> notes_adapter;
-//    ArrayList<String> block_of_notes;
     ArrayList<String> list_notes;
     String[] notes;
 
@@ -33,28 +32,20 @@ public class HistoryActivity extends AppCompatActivity {
 
     EditText editText;
     ListView lv_history;
+    TextView top_block_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        list_notes = new ArrayList<>();
+        top_block_name = findViewById(R.id.top_block_name);
 
         block_name = getIntent().getStringExtra("block_name");
 
-        File[] notes_files = FileHandler.listFilesInDirectory(getApplicationContext());
+        top_block_name.setText(block_name);
 
-//        block_of_notes = new ArrayList<>();
-//        for (File file : notes_files) {
-//            if (file.getName().equals("profileInstalled")) {
-//                continue;
-//            }
-//            Log.i(TAG, file.getName());
-//            String note = file.getName().replace(".txt", "");
-//            block_of_notes.add(note);
-//            Log.i(TAG, "" + block_of_notes.size());
-//        }
+        list_notes = new ArrayList<>();
 
         lv_history = findViewById(R.id.history_list);
 
@@ -76,14 +67,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         notes = error_handler.split("<next note>");
 
-        for (int i = 0; i < notes.length; i++) {
-            String note = notes[i];
-            Log.i(TAG, "note:\n" + note + "\nindex:\n" + i);
-        }
-
-//        for (String note : notes) {
-//            Log.i(TAG, note);
-//        }
         registerForContextMenu(lv_history);
 
         notes_adapter = new ArrayAdapter<>(this,
@@ -97,7 +80,6 @@ public class HistoryActivity extends AppCompatActivity {
         user_text = editText.getText().toString().strip();
         if(!user_text.isEmpty()) {
             FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
-
             Set_Adapter();
         }
         else {
@@ -116,17 +98,12 @@ public class HistoryActivity extends AppCompatActivity {
         Log.i(TAG, "ItemSelected");
         if (item.getTitle().equals(getString(R.string.delete))) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//            String fileName = block_of_notes.get(info.position);
 
             list_notes.addAll(Arrays.asList(notes));
 
-            for (String a : list_notes) {
-                Log.i(TAG, "a: " + a);
-            }
-
-            String fileName = list_notes.get(info.position);
+            String note = list_notes.get(info.position);
             // Удаляем файл через FileHandler
-            boolean isDeleted = FileHandler.deleteFile(getApplicationContext(), block_name, fileName);
+            boolean isDeleted = FileHandler.deleteNote(getApplicationContext(), block_name, note);
 
             if (isDeleted) {
                 Log.i(TAG, "File has been deleted");
@@ -136,7 +113,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show();
             } else {
                 Log.w(TAG, "File delete fail");
-                Toast.makeText(this, getString(R.string.note_delete_fail) + " " + fileName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.note_delete_fail) + " " + note, Toast.LENGTH_SHORT).show();
             }
         }
         return super.onContextItemSelected(item);

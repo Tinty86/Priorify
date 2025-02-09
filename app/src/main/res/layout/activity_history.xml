@@ -3,7 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".HistoryActivity">
+
+    <TextView
+        android:id="@+id/top_block_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:fontFamily="@font/montserrat_bold"
+        android:textAlignment="center"
+        />
+
+    <View
+        android:id="@+id/top_horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@+id/top_block_name"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
 
     <ListView
         android:id="@+id/history_list"
@@ -12,9 +37,19 @@
 
         android:divider="@null"
 
-        app:layout_constraintBottom_toTopOf="@+id/edit_text"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_horizontal_line"
+        app:layout_constraintTop_toBottomOf="@+id/top_horizontal_line"
+        />
 
+    <View
+        android:id="@+id/bottom_horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintBottom_toTopOf="@+id/edit_text"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
     <EditText

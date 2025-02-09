@@ -11,13 +11,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FileHandler {
 
     private static final String TAG = "FileHandler";
 
     public static void saveToFile(Context context, String block_name, String note) {
-        Log.i(TAG, "block_name:\n" + block_name + "\nnote:\n" + note);
         String filename = block_name + ".txt";
         File file = new File(context.getFilesDir(), filename);
         if (file.exists()) {
@@ -65,21 +66,40 @@ public class FileHandler {
             Log.w(TAG, "Файл не найден: " + filename);
             return "Файл не найден.";
         }
-        Log.i(TAG, fileContents.toString().trim());
         return fileContents.toString().trim();
     }
 
-    public static boolean deleteFile(Context context, String block_name, String fileName) {
-
-        File file = new File(new File(context.getFilesDir(), block_name + ".txt"), fileName + ".txt");
-
+    private static boolean deleteFile(Context context, String block_name) {
+        File file = new File(context.getFilesDir(), block_name + ".txt");
         if (file.exists()) {
             return file.delete();
         }
         else {
-            Log.w(TAG, "Попытка удалить несуществующий файл: " + fileName);
-            return false; // Файл не найден
+            Log.w(TAG, "Попытка удалить несуществующий файл: " + file.getName());
+            return false;
         }
+    }
+
+    public static boolean deleteNote(Context context, String block_name, String note) {
+        File file_block = new File(context.getFilesDir(), block_name + ".txt");
+        if (!file_block.exists()) {
+            Log.wtf(TAG, "Attempt to delete note from " + block_name + ".txt" + " has failed " +
+                    "because of non-existent " + block_name + ".txt");
+            return false;
+        }
+        ArrayList<String> file_content = new ArrayList<>(Arrays.asList(readFileContents(context, block_name).split("<next note>")));
+
+        file_content.remove(note);
+
+        deleteFile(context, block_name);
+
+        StringBuilder note_to_save = new StringBuilder();
+        for (String s : file_content) {
+            note_to_save.append(s).append("<next note>");
+        }
+
+        saveToFile(context, block_name, String.valueOf(note_to_save));
+        return true;
     }
     public static File[] listFilesInDirectory(Context context) {
         File directory = context.getFilesDir();

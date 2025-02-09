@@ -23,9 +23,8 @@
         style="@style/Urgent_And_Important_ButtonStyle"
         android:backgroundTint="@color/Teal"
 
-        android:text="@string/urgent_and_important"
-
-        android:onClick="onClick"/>
+        android:text="@string/urgent_and_important"/>
+<!--        android:onClick="onClick"/>-->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/high_right_button"
@@ -42,9 +41,9 @@
 
         style="@style/Non_Urgent_And_Important"
 
-        android:text="@string/non_urgent_and_important"
+        android:text="@string/non_urgent_and_important"/>
 
-        android:onClick="onClick"/>
+<!--        android:onClick="onClick"/>-->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/low_left_button"
@@ -61,9 +60,9 @@
 
         style="@style/Non_Important_And_Urgent"
 
-        android:text="@string/non_important_and_urgent"
+        android:text="@string/non_important_and_urgent"/>
 
-        android:onClick="onClick"/>
+<!--        android:onClick="onClick"/>-->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/low_right_button"
@@ -80,9 +79,9 @@
 
         style="@style/Non_Important_And_Non_Urgent"
 
-        android:text="@string/non_important_and_non_urgent"
+        android:text="@string/non_important_and_non_urgent"/>
 
-        android:onClick="onClick"/>
+<!--        android:onClick="onClick"/>-->
 
     <View
         android:id="@+id/horizontal_line"

@@ -17,7 +17,7 @@ public class FileHandler {
     private static final String TAG = "FileHandler";
 
     public static void saveToFile(Context context, String block_name, String note) {
-        Log.i(TAG, "block_name:" + block_name + "\nnote: " + note);
+        Log.i(TAG, "block_name:\n" + block_name + "\nnote:\n" + note);
         String filename = block_name + ".txt";
         File file = new File(context.getFilesDir(), filename);
         if (file.exists()) {
@@ -29,17 +29,15 @@ public class FileHandler {
                 }
             }
         }
-        Log.i(TAG, note);
         try {
             FileOutputStream outputStream;
             if (file.exists()) {
                 outputStream = new FileOutputStream(file, true);
-                outputStream.write(("\n" + note).getBytes());
             }
             else {
                 outputStream = new FileOutputStream(file);
-                outputStream.write(note.getBytes());
             }
+            outputStream.write((note + "<next note>").getBytes());
             outputStream.close();
         } catch (IOException e) {
             Log.e(TAG, "Ошибка при сохранения в файл: " + e.getMessage(), e);
@@ -71,16 +69,15 @@ public class FileHandler {
         return fileContents.toString().trim();
     }
 
-    public static boolean deleteFile(Context context, String block_name) {
-        String filename = block_name + ".txt";
-        File file = new File(context.getFilesDir(), filename);
-        Log.i(TAG, block_name);
+    public static boolean deleteFile(Context context, String block_name, String fileName) {
+
+        File file = new File(new File(context.getFilesDir(), block_name + ".txt"), fileName + ".txt");
 
         if (file.exists()) {
             return file.delete();
         }
         else {
-            Log.w(TAG, "Попытка удалить несуществующий файл: " + filename);
+            Log.w(TAG, "Попытка удалить несуществующий файл: " + fileName);
             return false; // Файл не найден
         }
     }

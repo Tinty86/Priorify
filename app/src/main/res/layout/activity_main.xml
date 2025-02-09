@@ -10,11 +10,6 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/high_left_button"
 
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintWidth_percent="0.5"
-
         app:layout_constraintBottom_toTopOf="@+id/horizontal_line"
         app:layout_constraintEnd_toStartOf="@id/vertical_line"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,11 +21,6 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/high_right_button"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintWidth_percent="0.5"
 
         app:layout_constraintBottom_toTopOf="@+id/horizontal_line"
         app:layout_constraintStart_toEndOf="@id/vertical_line"
@@ -44,11 +34,6 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/low_left_button"
 
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintWidth_percent="0.5"
-
         app:layout_constraintEnd_toStartOf="@id/vertical_line"
         app:layout_constraintTop_toBottomOf="@+id/horizontal_line"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,11 +45,6 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/low_right_button"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintWidth_percent="0.5"
 
         app:layout_constraintStart_toEndOf="@id/vertical_line"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -15,14 +15,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HistoryActivity extends AppCompatActivity {
 
     private static final String TAG = "HistoryActivity";
 
     ArrayAdapter<String> notes_adapter;
-    ArrayList<String> block_of_notes;
+//    ArrayList<String> block_of_notes;
+    ArrayList<String> list_notes;
     String[] notes;
+
+    String error_handler;
 
     String block_name;
     String user_text;
@@ -35,17 +39,22 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        list_notes = new ArrayList<>();
+
         block_name = getIntent().getStringExtra("block_name");
 
         File[] notes_files = FileHandler.listFilesInDirectory(getApplicationContext());
 
-        block_of_notes = new ArrayList<>();
-        for (File file : notes_files) {
-            if (file.getName().equals("profileInstalled"))
-                continue;
-            String note = file.getName().replace(".txt", "");
-            block_of_notes.add(note);
-        }
+//        block_of_notes = new ArrayList<>();
+//        for (File file : notes_files) {
+//            if (file.getName().equals("profileInstalled")) {
+//                continue;
+//            }
+//            Log.i(TAG, file.getName());
+//            String note = file.getName().replace(".txt", "");
+//            block_of_notes.add(note);
+//            Log.i(TAG, "" + block_of_notes.size());
+//        }
 
         lv_history = findViewById(R.id.history_list);
 
@@ -55,7 +64,7 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void Set_Adapter() {
-        String error_handler = FileHandler.readFileContents(getApplicationContext(), block_name);
+        error_handler = FileHandler.readFileContents(getApplicationContext(), block_name);
 
         if (error_handler.equals("Ошибка при чтении файла")) {
             Toast.makeText(this, "Ошибка при чтении файла", Toast.LENGTH_SHORT).show();
@@ -67,9 +76,14 @@ public class HistoryActivity extends AppCompatActivity {
 
         notes = error_handler.split("<next note>");
 
-        for (String note : notes) {
-            Log.i(TAG, note);
+        for (int i = 0; i < notes.length; i++) {
+            String note = notes[i];
+            Log.i(TAG, "note:\n" + note + "\nindex:\n" + i);
         }
+
+//        for (String note : notes) {
+//            Log.i(TAG, note);
+//        }
         registerForContextMenu(lv_history);
 
         notes_adapter = new ArrayAdapter<>(this,
@@ -82,7 +96,6 @@ public class HistoryActivity extends AppCompatActivity {
         editText = findViewById(R.id.edit_text);
         user_text = editText.getText().toString().strip();
         if(!user_text.isEmpty()) {
-
             FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
 
             Set_Adapter();
@@ -101,20 +114,28 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Log.i(TAG, "ItemSelected");
-        if (item.getTitle().equals("Удалить")) {
-            Log.i(TAG, "Удалить");
+        if (item.getTitle().equals(getString(R.string.delete))) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            String fileName = block_of_notes.get(info.position);
+//            String fileName = block_of_notes.get(info.position);
+
+            list_notes.addAll(Arrays.asList(notes));
+
+            for (String a : list_notes) {
+                Log.i(TAG, "a: " + a);
+            }
+
+            String fileName = list_notes.get(info.position);
             // Удаляем файл через FileHandler
-            boolean isDeleted = FileHandler.deleteFile(getApplicationContext(), fileName);
+            boolean isDeleted = FileHandler.deleteFile(getApplicationContext(), block_name, fileName);
 
             if (isDeleted) {
+                Log.i(TAG, "File has been deleted");
                 // Убираем элемент из списка и обновляем адаптер
-                block_of_notes.remove(info.position);
-                notes_adapter.notifyDataSetChanged();
+                list_notes.remove(info.position);
+                Set_Adapter();
                 Toast.makeText(this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show();
-
             } else {
+                Log.w(TAG, "File delete fail");
                 Toast.makeText(this, getString(R.string.note_delete_fail) + " " + fileName, Toast.LENGTH_SHORT).show();
             }
         }

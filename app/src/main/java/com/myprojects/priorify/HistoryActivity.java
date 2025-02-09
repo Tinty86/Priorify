@@ -1,3 +1,6 @@
+// TODO: Change the deleting mechanism. Instead of complete removal, func can strike through the text and add the week-timer that will
+//  update every day until it will achieve the 7-th day (for example, (3/7) <- timer on the third day).
+
 package com.myprojects.priorify;
 
 import android.os.Bundle;

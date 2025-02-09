@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Priorify</string>
     <string name="hint">Впишите свою заметку</string>
-    <string name="urgent_and_important">СРОЧНОЕ И ВАЖНОЕ</string>
-    <string name="non_urgent_and_important">НЕСРОЧНОЕ И ВАЖНОЕ</string>
-    <string name="non_important_and_urgent">НЕВАЖНОЕ И СРОЧНОЕ</string>
-    <string name="non_important_and_non_urgent">НЕВАЖНОЕ И НЕСРОЧНОЕ</string>
+    <string name="important_and_urgent">ВАЖНОЕ И\nСРОЧНОЕ</string>
+    <string name="important_and_non_urgent">ВАЖНОЕ И\nНЕСРОЧНОЕ</string>
+    <string name="non_important_and_urgent">НЕВАЖНОЕ И\nСРОЧНОЕ</string>
+    <string name="non_important_and_non_urgent">НЕВАЖНОЕ И\nНЕСРОЧНОЕ</string>
     <string name="save_hint">Сохранить заметку</string>
     <string name="delete">Удалить заметку</string>
     <string name="note_deleted">Заметка удалена</string>

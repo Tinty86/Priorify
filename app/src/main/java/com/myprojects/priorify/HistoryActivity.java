@@ -2,7 +2,9 @@
 //  updates every day until it will achieve the 7-th day (for example, (3/7) <- timer on the third day).
 //  Add feature to copy notes. This feature should be an option in menu when user select item from history list
 
-// TODO: Fix bug. After deleting a note extra empty note adds to the above from deleted note
+// TODO: Fix bug. After deleting a note extra empty note adds to the above from deleted note (transformed to -->
+//  Bug. Random deleting notes. Delete func either removes non-existing note or removes previous note instead of deleting chosen note)
+
 package com.myprojects.priorify;
 
 import android.os.Bundle;
@@ -18,10 +20,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -86,7 +92,28 @@ public class HistoryActivity extends AppCompatActivity {
             error_handler = "";
         }
 
-        notes = error_handler.split("<next note>");
+        String[] raw_notes = error_handler.split("<next note>");
+
+        int count_of_empty_strings = 0;
+        for (int i = 0; i < raw_notes.length; i++) {
+            if (raw_notes[i].isEmpty() || raw_notes[i].equals(" ")) {
+                count_of_empty_strings ++;
+            }
+        }
+        int index = 0;
+        notes = new String[raw_notes.length - count_of_empty_strings];
+        for (int i = 0; i < raw_notes.length; i++) {
+            if (raw_notes[i].isEmpty() || raw_notes[i].equals(" ")) {
+                continue;
+            }
+            notes[index] = raw_notes[i];
+            index++;
+        }
+//        for (int i = 0; i < raw_notes.length; i++) {
+//            if (notes[i].isEmpty() || notes[i].equals(" ")) {
+//                notes[i] = "<empty>";
+//            }
+//        }
 
         Log.d(TAG, "notes:\n" + Arrays.toString(notes));
 

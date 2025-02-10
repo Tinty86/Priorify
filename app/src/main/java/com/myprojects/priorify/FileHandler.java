@@ -40,7 +40,9 @@ public class FileHandler {
             }
             outputStream.write((note + "<next note>").getBytes());
             outputStream.close();
+            Log.d(TAG, "note till saving:\n" + note);
         } catch (IOException e) {
+            Toast.makeText(context, "Ошибка при сохранения в файл", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Ошибка при сохранения в файл: " + e.getMessage(), e);
         }
     }
@@ -81,6 +83,7 @@ public class FileHandler {
     }
 
     public static boolean deleteNote(Context context, String block_name, String note) {
+        Log.d(TAG, "block name:\n" + block_name + "\nnote:\n" + note);
         File file_block = new File(context.getFilesDir(), block_name + ".txt");
         if (!file_block.exists()) {
             Log.wtf(TAG, "Attempt to delete note from " + block_name + ".txt" + " has failed " +
@@ -89,16 +92,26 @@ public class FileHandler {
         }
         ArrayList<String> file_content = new ArrayList<>(Arrays.asList(readFileContents(context, block_name).split("<next note>")));
 
+        Log.d(TAG, "file_content:\n" + file_content);
+
+//        file_content.removeAll(new ArrayList<>(Arrays.asList(note, " ")));
         file_content.remove(note);
+
+        Log.d(TAG, "file_content after removal:\n" + file_content);
 
         deleteFile(context, block_name);
 
         StringBuilder note_to_save = new StringBuilder();
         for (String s : file_content) {
+            if (s.isEmpty()) continue;
+            Log.d(TAG, "s:\n" + s);
             note_to_save.append(s).append("<next note>");
+            Log.d(TAG, "note_to_save:\n" + note_to_save);
         }
-
-        saveToFile(context, block_name, String.valueOf(note_to_save));
+        if (!note_to_save.toString().isEmpty()) {
+            saveToFile(context, block_name, String.valueOf(note_to_save));
+        }
+//        saveToFile(context, block_name, note_to_save.toString());
         return true;
     }
     public static File[] listFilesInDirectory(Context context) {

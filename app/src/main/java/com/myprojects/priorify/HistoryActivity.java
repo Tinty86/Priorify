@@ -142,6 +142,8 @@ public class HistoryActivity extends AppCompatActivity {
             list_notes.addAll(Arrays.asList(notes));
 
             String note = list_notes.get(info.position);
+
+            Log.d(TAG, "position:\n" + info.position + "\nlist_notes:\n" + list_notes);
             // Удаляем файл через FileHandler
             boolean isDeleted = FileHandler.deleteNote(getApplicationContext(), block_name, note);
 
@@ -155,6 +157,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Log.w(TAG, "File delete fail");
                 Toast.makeText(this, getString(R.string.note_delete_fail) + " " + note, Toast.LENGTH_SHORT).show();
             }
+            list_notes.clear();
         }
         // else if (title.equals(getString(R.string.copy_option))) {
         //    ...

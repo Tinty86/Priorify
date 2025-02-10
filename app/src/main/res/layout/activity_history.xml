@@ -61,19 +61,17 @@
         android:hint="@string/hint"
         android:inputType="text"
 
-        app:layout_constraintBottom_toTopOf="@id/save_note"
+        app:layout_constraintBottom_toTopOf="@id/save_button"
         />
 
     <Button
-        android:id="@+id/save_note"
+        android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="65dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
-        android:text="@string/save_hint"
-
-        android:onClick="SaveButtonOnClick"/>
+        android:text="@string/save_hint"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

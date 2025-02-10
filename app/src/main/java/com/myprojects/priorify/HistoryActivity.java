@@ -18,10 +18,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -144,6 +148,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Log.w(TAG, "File delete fail");
                 Toast.makeText(this, getString(R.string.note_delete_fail) + " " + note, Toast.LENGTH_SHORT).show();
             }
+            list_notes.clear();
         }
         else if (title.equals(getString(R.string.copy_option))) {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -154,6 +159,7 @@ public class HistoryActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Текст скопирован в буфер обмена", Toast.LENGTH_SHORT).show();
         }
         list_notes.clear();
+
         return super.onContextItemSelected(item);
     }
 }

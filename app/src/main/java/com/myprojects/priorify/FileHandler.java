@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,7 +24,7 @@ public class FileHandler {
             for (String saved_note : readFileContents(context, block_name).split("<next note>")){
                 if (saved_note.equals(note)) {
                     Log.i(TAG, "Уже есть заметка, поэтому сохранение пропущено");
-                    Toast.makeText(context, "Уже есть заметка, поэтому сохранение пропущено", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.note_saving_skipped, Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -42,7 +41,7 @@ public class FileHandler {
             outputStream.close();
             Log.d(TAG, "note till saving:\n" + note);
         } catch (IOException e) {
-            Toast.makeText(context, "Ошибка при сохранения в файл", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.note_saving_failed, Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Ошибка при сохранения в файл: " + e.getMessage(), e);
         }
     }
@@ -78,6 +77,7 @@ public class FileHandler {
         }
         else {
             Log.w(TAG, "Попытка удалить несуществующий файл: " + file.getName());
+            Toast.makeText(context, R.string.attempt_to_delete_non_existing_file, Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -94,12 +94,13 @@ public class FileHandler {
 
         Log.d(TAG, "file_content:\n" + file_content);
 
-//        file_content.removeAll(new ArrayList<>(Arrays.asList(note, " ")));
         file_content.remove(note);
 
         Log.d(TAG, "file_content after removal:\n" + file_content);
 
-        deleteFile(context, block_name);
+        if (!deleteFile(context, block_name)) {
+            return false;
+        }
 
         StringBuilder note_to_save = new StringBuilder();
         for (String s : file_content) {
@@ -111,12 +112,11 @@ public class FileHandler {
         if (!note_to_save.toString().isEmpty()) {
             saveToFile(context, block_name, String.valueOf(note_to_save));
         }
-//        saveToFile(context, block_name, note_to_save.toString());
         return true;
     }
-    public static File[] listFilesInDirectory(Context context) {
-        File directory = context.getFilesDir();
-
-        return directory.listFiles();
-    }
+//    public static File[] listFilesInDirectory(Context context) {
+//        File directory = context.getFilesDir();
+//
+//        return directory.listFiles();
+//    }
 }

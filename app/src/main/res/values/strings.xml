@@ -10,4 +10,9 @@
     <string name="note_deleted">Заметка удалена</string>
     <string name="note_delete_fail">Ошибка удаления заметки</string>
     <string name="copy_option">Скопировать</string>
+    <string name="text_has_copied">Текст скопирован в буфер обмена</string>
+    <string name="file_reading_fail">Ошибка при чтении файла</string>
+    <string name="note_saving_skipped">Уже есть заметка, поэтому сохранение пропущено</string>
+    <string name="note_saving_failed">Ошибка при сохранения в файл</string>
+    <string name="attempt_to_delete_non_existing_file">Попытка удалить несуществующий файл: </string>
 </resources>

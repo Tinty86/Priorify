@@ -55,6 +55,8 @@
     <EditText
         android:id="@+id/edit_text"
 
+        android:importantForAutofill="no"
+
         android:layout_width="match_parent"
         android:layout_height="100dp"
 
@@ -71,6 +73,7 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
 
-        android:text="@string/save_hint" />
+        android:text="@string/save_hint"
+        />
   
 </androidx.constraintlayout.widget.ConstraintLayout>

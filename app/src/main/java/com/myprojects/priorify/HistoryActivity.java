@@ -1,5 +1,6 @@
 // TODO: Change the deleting mechanism. Instead of complete removal, func can strike through the text and add the week-timer that will
 //  update every day until it will achieve the 7-th day (for example, (3/7) <- timer on the third day).
+//  Add feature to copy notes. This feature should be an option in menu when user select item from history list
 
 package com.myprojects.priorify;
 
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
     EditText editText;
     ListView lv_history;
     TextView top_block_name;
+    Button save_bt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,20 @@ public class HistoryActivity extends AppCompatActivity {
         Set_Adapter();
 
         registerForContextMenu(lv_history);
+
+        save_bt = findViewById(R.id.save_button);
+
+        save_bt.setOnClickListener(v -> {
+            editText = findViewById(R.id.edit_text);
+            user_text = editText.getText().toString().strip();
+            if(!user_text.isEmpty()) {
+                FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
+                Set_Adapter();
+            }
+            else {
+                Log.i(TAG, "user_text пуст");
+            }
+        });
     }
 
     private void Set_Adapter() {
@@ -78,17 +95,17 @@ public class HistoryActivity extends AppCompatActivity {
         lv_history.setAdapter(notes_adapter);
     }
 
-    public void SaveButtonOnClick(View view) {
-        editText = findViewById(R.id.edit_text);
-        user_text = editText.getText().toString().strip();
-        if(!user_text.isEmpty()) {
-            FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
-            Set_Adapter();
-        }
-        else {
-            Log.i(TAG, "user_text пуст");
-        }
-    }
+//    public void SaveButtonOnClick(View view) {
+//        editText = findViewById(R.id.edit_text);
+//        user_text = editText.getText().toString().strip();
+//        if(!user_text.isEmpty()) {
+//            FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
+//            Set_Adapter();
+//        }
+//        else {
+//            Log.i(TAG, "user_text пуст");
+//        }
+//    }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

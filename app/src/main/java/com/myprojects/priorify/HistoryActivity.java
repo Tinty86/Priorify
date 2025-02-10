@@ -1,5 +1,6 @@
-// TODO: Change the deleting mechanism. Instead of complete removal, func can strike through the text and add the week-timer that will
-//  update every day until it will achieve the 7-th day (for example, (3/7) <- timer on the third day).
+// TODO: Change the deleting mechanism. Instead of complete removal, func can strike through the text and add the week-timer that
+//  updates every day until it will achieve the 7-th day (for example, (3/7) <- timer on the third day).
+//  Add feature to copy notes. This feature should be an option in menu when user select item from history list
 
 package com.myprojects.priorify;
 
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
     EditText editText;
     ListView lv_history;
     TextView top_block_name;
+    Button save_bt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,20 @@ public class HistoryActivity extends AppCompatActivity {
         Set_Adapter();
 
         registerForContextMenu(lv_history);
+
+        save_bt = findViewById(R.id.save_button);
+
+        save_bt.setOnClickListener(v -> {
+            editText = findViewById(R.id.edit_text);
+            user_text = editText.getText().toString().strip();
+            if(!user_text.isEmpty()) {
+                FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
+                Set_Adapter();
+            }
+            else {
+                Log.i(TAG, "user_text пуст");
+            }
+        });
     }
 
     private void Set_Adapter() {
@@ -68,7 +85,25 @@ public class HistoryActivity extends AppCompatActivity {
             error_handler = "";
         }
 
-        notes = error_handler.split("<next note>");
+        String[] raw_notes = error_handler.split("<next note>");
+
+        int count_of_empty_strings = 0;
+        for (String raw_note : raw_notes) {
+            if (raw_note.isEmpty() || raw_note.equals(" ")) {
+                count_of_empty_strings++;
+            }
+        }
+        int index = 0;
+        notes = new String[raw_notes.length - count_of_empty_strings];
+        for (String rawNote : raw_notes) {
+            if (rawNote.isEmpty() || rawNote.equals(" ")) {
+                continue;
+            }
+            notes[index] = rawNote;
+            index++;
+        }
+
+        Log.d(TAG, "notes:\n" + Arrays.toString(notes));
 
         registerForContextMenu(lv_history);
 
@@ -78,33 +113,25 @@ public class HistoryActivity extends AppCompatActivity {
         lv_history.setAdapter(notes_adapter);
     }
 
-    public void SaveButtonOnClick(View view) {
-        editText = findViewById(R.id.edit_text);
-        user_text = editText.getText().toString().strip();
-        if(!user_text.isEmpty()) {
-            FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
-            Set_Adapter();
-        }
-        else {
-            Log.i(TAG, "user_text пуст");
-        }
-    }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, v.getId(), 0, getString(R.string.delete));
+        menu.add(1, v.getId(), 1, getString(R.string.copy_option));
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Log.i(TAG, "ItemSelected");
-        if (item.getTitle().equals(getString(R.string.delete))) {
+        CharSequence title = item.getTitle();
+        if (title.equals(getString(R.string.delete))) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
             list_notes.addAll(Arrays.asList(notes));
 
             String note = list_notes.get(info.position);
+
+            Log.d(TAG, "position:\n" + info.position + "\nlist_notes:\n" + list_notes);
             // Удаляем файл через FileHandler
             boolean isDeleted = FileHandler.deleteNote(getApplicationContext(), block_name, note);
 
@@ -118,7 +145,11 @@ public class HistoryActivity extends AppCompatActivity {
                 Log.w(TAG, "File delete fail");
                 Toast.makeText(this, getString(R.string.note_delete_fail) + " " + note, Toast.LENGTH_SHORT).show();
             }
+            list_notes.clear();
         }
+        // else if (title.equals(getString(R.string.copy_option))) {
+        //    ...
+        // }
         return super.onContextItemSelected(item);
     }
 }

@@ -1,12 +1,10 @@
 // TODO: Change the deleting mechanism. Instead of complete removal, func can strike through the text and add the week-timer that
 //  updates every day until it will achieve the 7-th day (for example, (3/7) <- timer on the third day).
-//  Add feature to copy notes. This feature should be an option in menu when user select item from history list
-
-// TODO: Fix bug. After deleting a note extra empty note adds to the above from deleted note (transformed to -->
-//  Bug. Random deleting notes. Delete func either removes non-existing note or removes previous note instead of deleting chosen note)
 
 package com.myprojects.priorify;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -95,25 +93,20 @@ public class HistoryActivity extends AppCompatActivity {
         String[] raw_notes = error_handler.split("<next note>");
 
         int count_of_empty_strings = 0;
-        for (int i = 0; i < raw_notes.length; i++) {
-            if (raw_notes[i].isEmpty() || raw_notes[i].equals(" ")) {
-                count_of_empty_strings ++;
+        for (String raw_note : raw_notes) {
+            if (raw_note.isEmpty() || raw_note.equals(" ")) {
+                count_of_empty_strings++;
             }
         }
         int index = 0;
         notes = new String[raw_notes.length - count_of_empty_strings];
-        for (int i = 0; i < raw_notes.length; i++) {
-            if (raw_notes[i].isEmpty() || raw_notes[i].equals(" ")) {
+        for (String rawNote : raw_notes) {
+            if (rawNote.isEmpty() || rawNote.equals(" ")) {
                 continue;
             }
-            notes[index] = raw_notes[i];
+            notes[index] = rawNote;
             index++;
         }
-//        for (int i = 0; i < raw_notes.length; i++) {
-//            if (notes[i].isEmpty() || notes[i].equals(" ")) {
-//                notes[i] = "<empty>";
-//            }
-//        }
 
         Log.d(TAG, "notes:\n" + Arrays.toString(notes));
 
@@ -136,10 +129,9 @@ public class HistoryActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         Log.i(TAG, "ItemSelected");
         CharSequence title = item.getTitle();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        list_notes.addAll(Arrays.asList(notes));
         if (title.equals(getString(R.string.delete))) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-            list_notes.addAll(Arrays.asList(notes));
 
             String note = list_notes.get(info.position);
 
@@ -149,7 +141,6 @@ public class HistoryActivity extends AppCompatActivity {
 
             if (isDeleted) {
                 Log.i(TAG, "File has been deleted");
-                // Убираем элемент из списка и обновляем адаптер
                 list_notes.remove(info.position);
                 Set_Adapter();
                 Toast.makeText(this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show();
@@ -159,9 +150,16 @@ public class HistoryActivity extends AppCompatActivity {
             }
             list_notes.clear();
         }
-        // else if (title.equals(getString(R.string.copy_option))) {
-        //    ...
-        // }
+        else if (title.equals(getString(R.string.copy_option))) {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            Log.d(TAG, "list_notes:\n" + list_notes);
+            ClipData clip = ClipData.newPlainText("label", list_notes.get(info.position));
+            // Устанавливаем созданный ClipData в буфер обмена
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(getApplicationContext(), "Текст скопирован в буфер обмена", Toast.LENGTH_SHORT).show();
+        }
+        list_notes.clear();
+
         return super.onContextItemSelected(item);
     }
 }

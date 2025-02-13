@@ -56,12 +56,12 @@
         android:id="@+id/edit_text"
 
         android:importantForAutofill="no"
+        tools:ignore="TextFields"
 
         android:layout_width="match_parent"
         android:layout_height="100dp"
 
         android:hint="@string/hint"
-        android:inputType="text"
 
         app:layout_constraintBottom_toTopOf="@id/save_button"
         />

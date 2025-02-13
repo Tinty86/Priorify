@@ -68,9 +68,10 @@ public class HistoryActivity extends AppCompatActivity {
             if(!user_text.isEmpty()) {
                 FileHandler.saveToFile(getApplicationContext(), block_name, user_text);
                 Set_Adapter();
+                editText.setText("");
             }
             else {
-                Log.i(TAG, "user_text пуст");
+                Log.i(TAG, "user_text is empty");
             }
         });
     }

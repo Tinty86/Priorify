@@ -56,18 +56,19 @@ public class FileHandler {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     line = "\n" + line;
-                    fileContents.append(line).append("<next note>");
+//                    fileContents.append(line).append("<next note>");
+                    fileContents.append(line);
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Ошибка при чтении файла: " + e.getMessage(), e);
+                Log.e(TAG, "File reading failed: " + e.getMessage(), e);
                 return "Ошибка при чтении файла";
             }
         }
         else {
-            Log.w(TAG, "Файл не найден: " + filename);
+            Log.w(TAG, "File not found: " + filename);
             return "Файл не найден.";
         }
-        return fileContents.toString().trim();
+        return fileContents.toString().strip();
     }
 
     private static boolean deleteFile(Context context, String block_name) {
@@ -76,7 +77,7 @@ public class FileHandler {
             return file.delete();
         }
         else {
-            Log.w(TAG, "Попытка удалить несуществующий файл: " + file.getName());
+            Log.w(TAG, "Attempt to delete non-existing file: " + file.getName());
             Toast.makeText(context, R.string.attempt_to_delete_non_existing_file, Toast.LENGTH_SHORT).show();
             return false;
         }
